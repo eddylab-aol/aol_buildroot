@@ -1,0 +1,39 @@
+#!/bin/bash
+
+echo "Welcome To AndroidOverLinux !!!"
+echo "You must setup AoL Only once at the beginning"
+
+function output {
+	echo ""
+    echo -e "\033[33;1m""##### $1""\033[0m"
+}
+
+
+output "configure timezone..."
+sleep 3
+dpkg-reconfigure tzdata
+
+output "configure locales..."
+sleep 3
+dpkg-reconfigure locales
+
+output "configure root password..."
+CHECK=2
+while [ $CHECK -gt 1 ];
+do
+	passwd root
+	CHECK="$?"
+done
+
+output "fix some errors..."
+# fix fome error
+chmod a+rwx /tmp
+# fix ca-certificates error
+apt update
+apt autoremove ca-certificates -y
+apt install ca-certificates sysv-rc -y
+
+
+output "configuration finished..."
+
+rm ~/first_run

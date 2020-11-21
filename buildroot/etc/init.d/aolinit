@@ -1,0 +1,64 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          aolinit
+# Required-Start:    hostname
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      
+# Short-Description: aolinit init script
+# Description:       initscript by djjproject
+### END INIT INFO
+
+do_start() {
+	# dev/pts
+	mount -t devpts devpts /dev/pts
+	
+	# hostname 
+	/usr/bin/hostname $(cat /etc/hostname)
+	
+	# apply sysctl.conf
+	/usr/sbin/sysctl --system
+	
+	# patch in /dev folder bindings
+	mkdir /dev/net
+	ln -s /dev/tun /dev/net/tun
+	ln -s /dev/block/* /dev
+	ln -s /proc/mounts /etc/mtab
+
+	# reboot / halt / poweroff patch
+	cp /usr/local/bin/reboot /sbin/reboot
+
+	# fix init
+	rm /etc/rc3.d/*bootlogs
+	rm /etc/rc3.d/*rmnologin
+
+	rm /etc/rc6.d/*brightness
+	rm /etc/rc6.d/*udev
+	rm /etc/rc6.d/*urandom
+	rm /etc/rc6.d/*sendsigs
+	rm /etc/rc6.d/*hwclock.sh
+	rm /etc/rc6.d/*umountnfs.sh
+	rm /etc/rc6.d/*networking
+	rm /etc/rc6.d/*umountfs
+	rm /etc/rc6.d/*umountroot
+	rm /etc/rc6.d/*reboot
+}
+
+case "$1" in
+  start)
+    do_start
+  ;;
+  stop)
+
+  ;;
+  restart)
+
+  ;;
+  *)
+    echo "Usage: "$1" {start|stop|restart}"
+    exit 1
+  ;;
+esac
+
+exit 0
