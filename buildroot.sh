@@ -39,7 +39,7 @@ rm -rf linux.tar*
 rm -rf rootfs.tar.gz
 
 logn "### install dependent packages..."
-apt update && apt install -y debootstrap binfmt-support qemu-user-static binutils
+apt update && apt install -y debootstrap binfmt-support qemu-user-static binutils p7zip-full openjdk-11-jre
 update-binfmts --enable qemu-arm
 
 logn "### make debian10 buster $ROOTFS..."
