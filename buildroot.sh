@@ -200,6 +200,7 @@ rm -rf /data
 logn "### make update.zip..."
 cd updatezip
 ./mkupdatezip.sh
+./upload.sh
 
 logn "### buildroot routine finished..."
 
